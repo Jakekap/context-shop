@@ -19,7 +19,7 @@ export default function Filter() {
   };
 
   return (
-    <section className="flex justify-evenly my-10">
+    <section className="flex flex-col sm:flex-row justify-evenly my-5 gap-5 sm:my-10 sm:gap-0">
       <div className="flex justify-center items-center">
         <label htmlFor="price">Precio mínimo: </label>
         <input

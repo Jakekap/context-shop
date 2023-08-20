@@ -1,12 +1,22 @@
-import { useId } from "react";
-import { FaPlus, FaShoppingCart, FaMinus, FaTrash } from "../assets/icons";
+import { useState } from "react";
+import {
+  FaPlus,
+  FaShoppingCart,
+  FaMinus,
+  FaTrash,
+  FaTimes,
+} from "../assets/icons";
 import { useCart } from "../hooks/useCart";
 
 function Cart() {
-  const cartCheckboxId = useId();
-  const { cart, deleteFromCart, addToCart, clearCart } = useCart();
-
+  const { cart, deleteFromCart, addToCart, clearCart, totalCartProducts } =
+    useCart();
+  const [showCart, setShowCart] = useState(false);
   const isCartEmpty = cart.length === 0;
+
+  const handleShowCart = () => {
+    setShowCart((prevState) => !prevState);
+  };
 
   const subTotal = cart.reduce((acumulador, producto) => {
     return acumulador + producto.price * producto.quantity;
@@ -14,17 +24,30 @@ function Cart() {
 
   return (
     <>
-      <label htmlFor={cartCheckboxId} className="cursor-pointer">
-        <FaShoppingCart />
-      </label>
-      <input className="peer" type="checkbox" id={cartCheckboxId} hidden />
+      <button
+        onClick={handleShowCart}
+        className="flex justify-center items-center gap-3 w-auto hover:cursor-pointer hover:bg-gray-300 bg-gray-200 p-2 box-content rounded-md"
+      >
+        <FaShoppingCart color="gray" />
+        {totalCartProducts === 0 ? null : <span>{totalCartProducts}</span>}
+      </button>
 
       <aside
-        className={`fixed peer-checked:right-0 -right-96 top-0 h-screen bg-gray-400 w-96 duration-200 ease-in-out overflow-y-auto`}
+        className={`fixed ${
+          showCart ? "right-0" : "-right-96"
+        }  top-0 h-screen bg-gray-400 w-96 duration-200 ease-in-out overflow-y-auto`}
       >
-        <h2 className="select-none text-white text-2xl font-semibold text-center py-4">
-          Cart
-        </h2>
+        <div className="relative">
+          <h2 className="select-none text-white text-2xl font-semibold text-center py-4">
+            Cart
+          </h2>
+          <button
+            onClick={handleShowCart}
+            className="flex justify-center items-center w-4 h-4 hover:cursor-pointer absolute left-3 top-3 hover:bg-gray-300 bg-gray-200 p-2 box-content rounded-full"
+          >
+            <FaTimes />
+          </button>
+        </div>
         <ul className="flex flex-col gap-5 m-5">
           {cart.map((product) => {
             return (
